@@ -8,4 +8,4 @@ self.addEventListener("message", function(e){
         }
     }
     self.postMessage(response);    
-})
+}, false)

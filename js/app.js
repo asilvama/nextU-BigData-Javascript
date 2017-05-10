@@ -1,55 +1,72 @@
-// var Calculadora = (function(){
-//     var Constructor = function(nuevoValor){
-//         this.valor = nuevoValor || 0;
-//         var validarParametro = function(parametro){
-//             return !isNaN(parseFloat(parametro) && isFinite(parametro));
-//         }
-//     }
+var Calculadora = (function(){
+    var Constructor = function(nuevoValor){
+        this.valor = nuevoValor || 0;
+        this.display = document.getElementById('display');
+        var obtenerIdDelElemento = function(e){
+            e = e || window.event;
+            var target = e.target || e.srcElement;
+            return document.getElementById(target.id);
+        };
+        var validarParametro = function(parametro){
+            return !isNaN(parseFloat(parametro) && isFinite(parametro));
+        };
+        this.teclaPresionada = function(e){
+            var teclaSeleccionda = obtenerIdDelElemento(e);
+            if(validarParametro(teclaSeleccionda.id)){
+                display.innerHTML = display.innerHTML + teclaSeleccionda.id;    
+            }
+            teclaSeleccionda.style.padding = '2px';        
+        };
+        this.NotTeclaPresionada = function(e){
+            var teclaSeleccionda = obtenerIdDelElemento(e);
+            teclaSeleccionda.style.padding = '0px';        
+        };
+    }
+    Constructor.prototype.obtenerValor= function(){
+        return this.valor;
+    };    
+    Constructor.prototype.sumar = function(){
+        if(this.validarParametro(sumando)){
+            this.valor += sumando;
+            this.display.innerHTML = this.valor.toString();
+            return this.valor;
+        }
+    };
+    Constructor.prototype.restar = function(sustraendo){
+        if(this.validarParametro(sustraendo)){
+            this.valor -= sustraendo;
+            this.display.innerHTML = this.valor.toString();
+            return this.valor;
+        }
+    };
+    Constructor.prototype.multiplicar = function(factor){
+        if(this.validarParametro(factor)){
+            this.valor *= factor;
+            this.display.innerHTML = this.valor.toString();
+            return this.valor;
+        }
+    };
+    Constructor.prototype.division = function(divisor){
+        if(this.validarParametro(divisor)){
+            this.valor /= divisor;
+            this.display.innerHTML = this.valor.toString();
+            return this.valor;
+        }
+    }
 
-//     Constructor.prototype.obtenerValor= function(){
-//         return this.valor;
-//     };    
-//     Constructor.prototype.sumar= function(sumando){
-//         if(validarParametro(parametro)){
-//             this.valor += sumando;
-//             return this.valor;
-//         }
-//     };
-//     Constructor.prototype.restar= function(sustraendo){
-//         if(validarParametro(parametro)){
-//             this.valor -= sustraendo;
-//             return this.valor;
-//         }
-//     };
-//     Constructor.prototype.multiplicar= function(factor){
-//         if(validarParametro(parametro)){
-//             this.valor *= factor;
-//             return this.valor;
-//         }
-//     };
-//     Constructor.prototype.division= function(divisor){
-//         if(validarParametro(parametro)){
-//             this.valor /= factor;
-//             return this.valor;
-//         }
-//     }
-//     Constructor.validarParametro = function(parametro){
-//             return !isNaN(parseFloat(parametro) && isFinite(parametro));
-//     };
+    return Constructor;
+})();
 
-//     return Constructor;
-// })();
+var miCalculadora = new Calculadora();
 
-var inputHandler = function(event){
-    var teclaPresionada = event.which || event.keycode;
-    var valorDisplay = document.getElementById('display');
+var elementoTeclado = document.querySelector('.teclado');
+var elementoDisplay = document.getElementById('display');
 
-    var worker = new Worker('workers.js');
-    worker.addEventListener('message', function(e){       
-        valorDisplay.innerHTML = e.data;
-        worker.terminate();
-    });
-    worker.postMessage(1);
-};
+// Capturamos el elemento al que damos click...
+elementoTeclado.addEventListener('mousedown', miCalculadora.teclaPresionada, false);
+// Restauramos cuando damos click...
+elementoTeclado.addEventListener('mouseup', miCalculadora.NotTeclaPresionada, false);
 
-document.onkeypress = inputHandler;
+elementoTeclado.addEventListener('change', function(e){
+
+});
